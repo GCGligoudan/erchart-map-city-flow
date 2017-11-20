@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/3.8.5/echarts.min.js"></script>
+</head>
+
+<body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="width: 600px;height:500px;"></div>
+    <!-- <script type="text/javascript">
+        $.get('430600.json', function (chinaJson) {
+            echarts.registerMap('岳阳市', chinaJson);
+            var chart = echarts.init(document.getElementById('main'));
+            chart.setOption({
+                series: [{
+                    type: 'map',
+                    map: '岳阳市'
+                }]
+            });
+        });
+    </script> -->
+    <script>
+        var uploadedDataURL = "430600.json";
+
+        $.get(uploadedDataURL, function (geoJson) {
+            var myChart = echarts.init(document.getElementById('main'));
+
+            myChart.hideLoading();
+
+            echarts.registerMap('岳阳市', geoJson);
+
+            var allData = {
+                "citys":[
+                    {"name":"岳阳市","value":[113.135151,29.362762,2],"symbolSize":1,"itemStyle":{"normal":{"color":"#F58158"}}},
+                    {"name":"岳阳县","value":[113.122924,29.149504,2],"symbolSize":2,"itemStyle":{"normal":{"color":"#F58158"}}},
+                    {"name":"云溪区","value":[113.279062,29.478343,2],"symbolSize":1,"itemStyle":{"normal":{"color":"#F58158"}}},
+                    {"name":"临湘市","value":[113.457032,29.482637,2],"symbolSize":1,"itemStyle":{"normal":{"color":"#F58158"}}},
+                    {"name":"君山区","value":[113.013025,29.467288,2],"symbolSize":1,"itemStyle":{"normal":{"color":"#F58158"}}},
+                    {"name":"华容县","value":[112.547263,29.536952,2],"symbolSize":1,"itemStyle":{"normal":{"color":"#F58158"}}},
+                    {"name":"湘阴县","value":[112.91545,28.69614,2],"symbolSize":1,"itemStyle":{"normal":{"color":"#F58158"}}},
+                    {"name":"汨罗市","value":[113.073583,28.812676,2],"symbolSize":1,"itemStyle":{"normal":{"color":"#F58158"}}},
+                    {"name":"平江县","value":[113.587913,28.707665,2],"symbolSize":1,"itemStyle":{"normal":{"color":"#F58158"}}},
+                ],
+
+
+                "moveLines":[
+                    {"fromName":"岳阳县","toName":"岳阳市","coords":[[113.122924,29.149504],[113.135151,29.362762]]},
+                    {"fromName":"岳阳县","toName":"云溪区","coords":[[113.122924,29.149504],[113.279062,29.478343]]},
+                    {"fromName":"岳阳县","toName":"临湘市","coords":[[113.122924,29.149504],[113.457032,29.482637]]},
+                    {"fromName":"岳阳县","toName":"君山区","coords":[[113.122924,29.149504],[113.013025,29.467288]]},
+                    {"fromName":"岳阳县","toName":"华容县","coords":[[113.122924,29.149504],[112.547263,29.536952]]},
+                    {"fromName":"岳阳县","toName":"湘阴县","coords":[[113.122924,29.149504],[112.91545,28.69614]]},
+                    {"fromName":"岳阳县","toName":"汨罗市","coords":[[113.122924,29.149504],[113.073583,28.812676]]},
+                    {"fromName":"岳阳县","toName":"平江县","coords":[[113.122924,29.149504],[113.587913,28.707665]]},
+                ]
+            };
+              
+            option = {
+                backgroundColor: '#fafafa',
+                title: {
+                    text: '',
+                    left: 'center',
+                    textStyle: {
+                        color: '#fff'
+                    }
+                },
+                // legend: {
+                //     show: true,
+                //     orient: 'vertical',
+                //     top: 'bottom',
+                //     left: 'right',
+                //     data: ['地点', '线路'],
+                //     textStyle: {
+                //         color: '#fff'
+                //     }
+                // },
+                geo: {
+                    map: '岳阳市',
+                    label: {
+                        emphasis: {
+                            show: false
+                        }
+                    },
+                    roam: false,
+                    itemStyle: {
+                        normal: {
+                            areaColor: '#FBD5C7',
+                            borderColor: '#404a59'
+                        },
+                        emphasis: {
+                            areaColor: '#FBD5C7'
+                        }
+                    }
+                },
+                series: [{
+                    name: '地点',
+                    type: 'effectScatter',
+                    coordinateSystem: 'geo',
+                    zlevel: 2,
+                    rippleEffect: {
+                        brushType: 'stroke',
+                        period:7,
+                        scale:26
+                    },
+                    label: {
+                        emphasis: {
+                            show: true,
+                            position: 'right',
+                            formatter: '{b}'
+                        }
+                    },
+                    symbolSize: 2,
+                    showEffectOn: 'render',
+                    itemStyle: {
+                        normal: {
+                            color: '#46bee9'
+                        }
+                    },
+                    data: allData.citys
+                }, {
+                    name: '线路',
+                    type: 'lines',
+                    coordinateSystem: 'geo',
+                    zlevel: 2,
+                    large: true,
+                    effect: {
+                        show: true,
+                        constantSpeed: 30,
+                        symbol: 'arrow',//ECharts 提供的标记类型包括 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow'
+                        symbolSize: 6,
+                        trailLength: 0,
+                    },
+                    lineStyle: {
+                        normal: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                    offset: 0, color: '#58B3CC'
+                                }, {
+                                    offset: 1, color: '#F58158'
+                                }], false),
+                            width: 2,
+                            opacity: 0.8,
+                            curveness: 0.2
+                        }
+                    },
+                    data: allData.moveLines
+                }]
+            };
+            myChart.setOption(option);
+        });
+    </script>
+</body>
+
+</html>
